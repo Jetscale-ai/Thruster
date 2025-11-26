@@ -28,6 +28,7 @@ RUN apt-get update && apt-get upgrade -y && \
     dnsutils \
     tini \
     tzdata \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install yq (Pinned Version)
