@@ -5,7 +5,6 @@
 
 # ------------------------------------------
 # TARGET: thruster-dev
-# The Heavy Lifter: Ubuntu 24.04 + Admin Tools
 # ------------------------------------------
 FROM ubuntu:24.04 AS thruster-dev
 
@@ -13,8 +12,6 @@ ENV DEBIAN_FRONTEND=noninteractive
 SHELL ["/bin/bash", "-c"]
 
 # Install Core Mechanics
-# - Upgrade OS to latest patches
-# - Install Network/Build tools
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y --no-install-recommends \
     curl \
@@ -33,22 +30,17 @@ RUN apt-get update && apt-get upgrade -y && \
     tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# Install yq (Portable YAML processor) - Essential for CI
-RUN wget https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 -O /usr/bin/yq && \
+# Install yq (Pinned Version)
+ARG YQ_VERSION=v4.44.3
+ARG YQ_BINARY=yq_linux_amd64
+RUN curl -fsSL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}" -o /usr/bin/yq && \
     chmod +x /usr/bin/yq
 
 # ------------------------------------------
 # TARGET: thruster
-# The Combustion Chamber: Alpine 3.20 + Minima
 # ------------------------------------------
 FROM alpine:3.20 AS thruster
 
-# Install Runtime Essentials
-# - tini: Init process
-# - ca-certificates: HTTPS support
-# - tzdata: Correct logging timestamps
-# - bash: For pragmatic entrypoint compatibility
-# - curl: For Healthchecks
 RUN apk update && apk upgrade && \
     apk add --no-cache \
     ca-certificates \
@@ -58,4 +50,3 @@ RUN apk update && apk upgrade && \
     curl
 
 ENTRYPOINT ["/sbin/tini", "--"]
-

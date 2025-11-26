@@ -1,94 +1,14 @@
-name: Thruster Release
+name: Release
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   workflow_dispatch: {}
-
-permissions:
-  contents: write
-  packages: write
 
 jobs:
   release:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Detect Local Run
-        id: local_check
-        run: |
-          if [[ "${ACT:-}" == "true" ]]; then
-            echo "is_local=true" >> "$GITHUB_OUTPUT"
-            echo "suffix=-local" >> "$GITHUB_OUTPUT"
-          else
-            echo "is_local=false" >> "$GITHUB_OUTPUT"
-            echo "suffix=" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Semantic Release
-        id: semrel
-        if: steps.local_check.outputs.is_local != 'true'
-        uses: go-semantic-release/action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Fake version locally
-        id: semrel_local
-        if: steps.local_check.outputs.is_local == 'true'
-        run: echo "version=0.0.0-local" >> "$GITHUB_OUTPUT"
-
-      - name: Login to GHCR
-        if: steps.semrel.outputs.version != '' || steps.local_check.outputs.is_local == 'true'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Docker Buildx
-        if: steps.semrel.outputs.version != '' || steps.local_check.outputs.is_local == 'true'
-        uses: docker/setup-buildx-action@v3
-
-      - name: Build and Push Images
-        if: steps.semrel.outputs.version != '' || steps.local_check.outputs.is_local == 'true'
-        env:
-          VERSION: ${{ steps.semrel.outputs.version || steps.semrel_local.outputs.version }}
-          IMAGE_NAME: thruster
-          OWNER: ${{ github.repository_owner }}
-          SUFFIX: ${{ steps.local_check.outputs.suffix }}
-        run: |
-          OWNER_LC=$(echo "${OWNER}" | tr '[:upper:]' '[:lower:]')
-
-          # --- Build Thruster Dev ---
-          GHCR_DEV="ghcr.io/${OWNER_LC}/${IMAGE_NAME}-dev"
-          TAGS_DEV="${GHCR_DEV}:${VERSION}${SUFFIX},${GHCR_DEV}:latest${SUFFIX}"
-          
-          echo "Building Thruster Dev: ${TAGS_DEV}"
-          docker buildx build \
-            --target "thruster-dev" \
-            --label "org.opencontainers.image.source=https://github.com/${{ github.repository }}" \
-            --push \
-            --cache-from type=gha,scope=thruster-dev \
-            --cache-to type=gha,mode=max,scope=thruster-dev \
-            $(echo "${TAGS_DEV}" | tr ',' '\n' | sed 's/^/--tag /') \
-            .
-
-          # --- Build Thruster Runtime ---
-          GHCR_RUN="ghcr.io/${OWNER_LC}/${IMAGE_NAME}"
-          TAGS_RUN="${GHCR_RUN}:${VERSION}${SUFFIX},${GHCR_RUN}:latest${SUFFIX}"
-          
-          echo "Building Thruster Runtime: ${TAGS_RUN}"
-          docker buildx build \
-            --target "thruster" \
-            --label "org.opencontainers.image.source=https://github.com/${{ github.repository }}" \
-            --push \
-            --cache-from type=gha,scope=thruster \
-            --cache-to type=gha,mode=max,scope=thruster \
-            $(echo "${TAGS_RUN}" | tr ',' '\n' | sed 's/^/--tag /') \
-            .
-
+    uses: jetscale/booster/.github/workflows/release.yml@main
+    with:
+      image_name: thruster
+      languages: "" # Empty triggers Base Image mode
+    secrets: inherit
