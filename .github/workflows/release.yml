@@ -7,7 +7,7 @@ on:
 
 jobs:
   release:
-    uses: jetscale/booster/.github/workflows/release.yml@main
+    uses: jetscale-ai/booster/.github/workflows/release.yml@main
     with:
       image_name: thruster
       languages: "" # Empty triggers Base Image mode
