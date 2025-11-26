@@ -10,5 +10,5 @@ jobs:
     uses: jetscale-ai/booster/.github/workflows/release.yml@main
     with:
       image_name: thruster
-      languages: "" # Empty triggers Base Image mode
+      publish_to_dockerhub: true
     secrets: inherit
