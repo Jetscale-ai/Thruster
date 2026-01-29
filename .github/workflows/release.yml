@@ -10,5 +10,7 @@ jobs:
     uses: jetscale-ai/booster/.github/workflows/release.yml@main
     with:
       image_name: thruster
+      dockerfile: ./Dockerfile
       publish_to_dockerhub: true
+      push_git_tag: true
     secrets: inherit

@@ -11,8 +11,8 @@ It serves as the **Base Image** for all upstream vehicles (specifically **[Boost
 
 | Image | Base OS | Purpose | Key Tools |
 | :--- | :--- | :--- | :--- |
-| `ghcr.io/jetscale/thruster-dev` | Ubuntu 24.04 | CI, DevContainers | `git`, `curl`, `vim`, `jq`, `yq`, `make`, `tini` |
-| `ghcr.io/jetscale/thruster` | Alpine 3.20 | Production | `tini`, `ca-certificates`, `tzdata`, `bash`, `curl` |
+| `ghcr.io/jetscale-ai/thruster-dev` | Ubuntu 24.04 | CI, DevContainers | `git`, `curl`, `vim`, `jq`, `yq`, `make`, `tini` |
+| `ghcr.io/jetscale-ai/thruster` | Alpine 3.20 | Production | `tini`, `ca-certificates`, `tzdata`, `bash`, `curl` |
 
 ## Usage
 
@@ -20,7 +20,7 @@ This image is intended to be the `FROM` instruction for downstream projects.
 
 ```dockerfile
 # Example inheritance
-FROM ghcr.io/jetscale/thruster-dev:latest AS dev-base
+FROM ghcr.io/jetscale-ai/thruster-dev:latest AS dev-base
 # ... install languages ...
 ```
 
@@ -32,6 +32,16 @@ To build locally:
 docker buildx build --target thruster-dev .
 docker buildx build --target thruster .
 ```
+
+## Release
+
+This repo releases via the shared **Booster** reusable workflow:
+
+- Wrapper workflow: `.github/workflows/release.yml`
+- Reusable workflow: `jetscale-ai/booster/.github/workflows/release.yml`
+
+Versioning is driven by `go-semantic-release` (commit history); images are
+published to GHCR and optionally Docker Hub (if credentials exist).
 
 ## License
 

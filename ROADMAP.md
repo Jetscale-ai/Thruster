@@ -5,9 +5,9 @@
 ## Phase 1: Ignition (Initialization)
 > *Goal: Establish the base images.*
 
-- [ ] **The Blueprint:** Create `Dockerfile` with standardized `thruster-dev` and `thruster` targets.
-- [ ] **The Mechanics:** Install the standard toolset (`jq`, `yq`, `git`) to ensure downstream consistency.
-- [ ] **The Spark:** Implement the `release.yml` workflow to publish these images.
+- [x] **The Blueprint:** Create `Dockerfile` with standardized `thruster-dev` and `thruster` targets.
+- [x] **The Mechanics:** Install the standard toolset (`jq`, `yq`, `git`) to ensure downstream consistency.
+- [x] **The Spark:** Implement the `release.yml` workflow to publish these images.
 
 ## Phase 2: Calibration (Hardening)
 > *Goal: Security and Performance.*
@@ -18,5 +18,5 @@
 ## Phase 3: Integration (Coupling)
 > *Goal: Connect to Booster.*
 
-- [ ] **Update Booster:** Refactor `jetscale/booster` to use `FROM ghcr.io/jetscale/thruster`.
+- [x] **Update Booster:** Refactor `jetscale/booster` to use `FROM ghcr.io/jetscale-ai/thruster`.
 
