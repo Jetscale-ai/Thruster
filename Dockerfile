@@ -37,9 +37,9 @@ ARG YQ_BINARY=yq_linux_amd64
 RUN curl -fsSL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/${YQ_BINARY}" -o /usr/bin/yq && \
     chmod +x /usr/bin/yq
 
-# ------------------------------------------
+# -----------------------------------------
 # TARGET: thruster
-# ------------------------------------------
+# -----------------------------------------
 FROM alpine:3.21 AS thruster
 
 RUN apk update && apk upgrade && \
