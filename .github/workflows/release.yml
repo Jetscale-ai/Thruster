@@ -10,7 +10,7 @@ env:
 
 jobs:
   release:
-    uses: jetscale-ai/booster/.github/workflows/release.yml@main
+    uses: Jetscale-ai/Booster/.github/workflows/release.yml@main
     with:
       image_name: thruster
       dockerfile: ./Dockerfile

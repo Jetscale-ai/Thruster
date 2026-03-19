@@ -41,7 +41,7 @@ docker buildx build --target thruster .
 This repo releases via the shared **Booster** reusable workflow:
 
 - Wrapper workflow: `.github/workflows/release.yml`
-- Reusable workflow: `jetscale-ai/booster/.github/workflows/release.yml`
+- Reusable workflow: `Jetscale-ai/Booster/.github/workflows/release.yml`
 
 Versioning is driven by `go-semantic-release` (commit history); images are
 published to GHCR and optionally Docker Hub (if credentials exist).
