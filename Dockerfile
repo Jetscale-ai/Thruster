@@ -29,6 +29,7 @@ RUN apt-get update && apt-get upgrade -y && \
     tini \
     tzdata \
     unzip \
+    ripgrep \
     && rm -rf /var/lib/apt/lists/*
 
 # Install yq (Pinned Version)
