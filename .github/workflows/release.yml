@@ -1,4 +1,4 @@
-name: Release
+name: Thruster Release
 
 on:
   push:
@@ -19,7 +19,7 @@ jobs:
     secrets: inherit
 
   trigger-booster:
-    name: Trigger Booster Release
+    name: Trigger booster release
     needs: release
     if: github.ref == 'refs/heads/main' && needs.release.result == 'success'
     runs-on: ubuntu-latest
