@@ -30,10 +30,27 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.JETSCALEBOT_GITHUB_TOKEN || secrets.GITHUB_TOKEN }}
         run: |
-          gh api \
-            --method POST \
-            repos/Jetscale-ai/Booster/actions/workflows/booster-release.yml/dispatches \
-            -f ref=main
+          DISPATCH_OUTPUT=$(gh workflow run "booster-release.yml" \
+            --repo Jetscale-ai/Booster \
+            --ref main \
+            -f upstream_repo="${GITHUB_REPOSITORY}" \
+            -f upstream_workflow="${GITHUB_WORKFLOW}" \
+            -f upstream_run_id="${GITHUB_RUN_ID}" \
+            -f upstream_run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" \
+            -f upstream_sha="${GITHUB_SHA}" 2>&1)
+
+          echo "$DISPATCH_OUTPUT"
+
+          DOWNSTREAM_URL=$(printf '%s\n' "$DISPATCH_OUTPUT" | rg -o 'https://github\.com/[^[:space:]]+/actions/runs/[0-9]+' -N -m 1 || true)
+          DOWNSTREAM_RUN_ID=$(printf '%s\n' "$DOWNSTREAM_URL" | rg -o '[0-9]+$' -N -m 1 || true)
+
+          echo "## Downstream Dispatches" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [[ -n "$DOWNSTREAM_URL" ]]; then
+            echo "- Booster: [${DOWNSTREAM_RUN_ID:-open}]($DOWNSTREAM_URL)" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "- Booster: dispatched successfully, run URL not captured" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: Summarize Trigger
         run: |
