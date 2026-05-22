@@ -1,6 +1,6 @@
 # Thruster Strategic Horizon
 
-**Objective:** Provide a hardened, pre-warmed OS foundation for JetScale's Docker ecosystem.
+**Objective:** Provide a hardened, pre-warmed OS foundation for Jetscale's Docker ecosystem.
 
 ## Phase 1: Ignition (Initialization)
 
