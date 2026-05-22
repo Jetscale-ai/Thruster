@@ -1,12 +1,12 @@
 # Thruster
 
-**Thruster** is the kinetic engine of the JetScale infrastructure. It provides the raw operating environment and mechanical toolchain required to generate propulsion.
+**Thruster** is the kinetic engine of the Jetscale infrastructure. It provides the raw operating environment and mechanical toolchain required to generate propulsion.
 
 It serves as the **Base Image** for all upstream vehicles (specifically
 **[Booster](https://github.com/Jetscale-ai/Booster)**), providing:
 
 1. **Thruster Dev (`thruster-dev`)**: A heavy-duty Ubuntu 24.04 environment pre-loaded with the "mechanic's kit" (`curl`, `git`, `jq`, `yq`, `make`).
-2. **Thruster Runtime (`thruster`)**: A streamlined Alpine 3.21 combustion
+2. **Thruster Runtime (`thruster`)**: A streamlined Alpine 3.22 combustion
    chamber, hardened for production with only the essentials (`tini`,
    `ca-certificates`).
 
@@ -15,7 +15,7 @@ It serves as the **Base Image** for all upstream vehicles (specifically
 | Image | Base OS | Purpose | Key Tools |
 | :--- | :--- | :--- | :--- |
 | `ghcr.io/jetscale-ai/thruster-dev` | Ubuntu 24.04 | CI, DevContainers | `git`, `curl`, `vim`, `jq`, `yq`, `make`, `tini` |
-| `ghcr.io/jetscale-ai/thruster` | Alpine 3.21 | Production | `tini`, `ca-certificates`, `tzdata`, `bash`, `curl` |
+| `ghcr.io/jetscale-ai/thruster` | Alpine 3.22 | Production | `tini`, `ca-certificates`, `tzdata`, `bash`, `curl` |
 
 ## Usage
 
@@ -41,14 +41,10 @@ docker buildx build --target thruster .
 This repo releases via the shared **Booster** reusable workflow:
 
 - Wrapper workflow: `.github/workflows/release.yml`
-- Reusable workflow: `Jetscale-ai/Booster/.github/workflows/release.yml`
+- Reusable workflow: `jetscale-ai/booster/.github/workflows/release.yml`
 
 Versioning is driven by `go-semantic-release` (commit history); images are
 published to GHCR and optionally Docker Hub (if credentials exist).
-
-When a `main` release succeeds, Thruster now dispatches Booster's
-`booster-release.yml` workflow so downstream Booster images rebuild against the
-latest Thruster base images.
 
 ## License
 

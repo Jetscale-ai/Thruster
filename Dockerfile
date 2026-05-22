@@ -1,5 +1,5 @@
 # ==========================================
-# JetScale Thruster
+# Jetscale Thruster
 # The Kinetic Engine (Base OS + Tools)
 # ==========================================
 
@@ -41,10 +41,10 @@ RUN curl -fsSL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/
 # -----------------------------------------
 # TARGET: thruster
 # -----------------------------------------
-FROM alpine:3.21 AS thruster
+FROM alpine:3.22 AS thruster
 
-RUN apk update && apk upgrade && \
-    apk add --no-cache \
+RUN apk upgrade --no-cache && \
+    apk add --no-cache --upgrade \
     ca-certificates \
     tini \
     tzdata \
