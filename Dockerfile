@@ -32,6 +32,14 @@ RUN apt-get update && apt-get upgrade -y && \
     ripgrep \
     && rm -rf /var/lib/apt/lists/*
 
+# eMudhra intermediate compromise (2026-10-20): fail the build if the system
+# bundle still trusts the root that chains to the compromised intermediates.
+# Fixed in Ubuntu ca-certificates 20260816ubuntu0.24.04.1 / Alpine 20261020-r0.
+# https://emudhra.we-have-a-problem.com/
+# (grep matches the first base64 line of emSign ECC Root CA - G3,
+#  SHA-256 86:A1:EC:BA:...:6B:BE:6B; the bundle carries no labels)
+RUN ! grep -qF "MIICTjCCAdOgAwIBAgIKPPYHqWhwDtqLhDAKBggqhkjOPQQDAzBrMQswCQYDVQQG" /etc/ssl/certs/ca-certificates.crt
+
 # Install yq (Pinned Version)
 ARG YQ_VERSION=v4.44.3
 ARG YQ_BINARY=yq_linux_amd64
@@ -50,5 +58,13 @@ RUN apk upgrade --no-cache && \
     tzdata \
     bash \
     curl
+
+# eMudhra intermediate compromise (2026-10-20): fail the build if the system
+# bundle still trusts the root that chains to the compromised intermediates.
+# Fixed in Ubuntu ca-certificates 20260816ubuntu0.24.04.1 / Alpine 20261020-r0.
+# https://emudhra.we-have-a-problem.com/
+# (grep matches the first base64 line of emSign ECC Root CA - G3,
+#  SHA-256 86:A1:EC:BA:...:6B:BE:6B; the bundle carries no labels)
+RUN ! grep -qF "MIICTjCCAdOgAwIBAgIKPPYHqWhwDtqLhDAKBggqhkjOPQQDAzBrMQswCQYDVQQG" /etc/ssl/certs/ca-certificates.crt
 
 ENTRYPOINT ["/sbin/tini", "--"]
