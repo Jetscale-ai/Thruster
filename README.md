@@ -6,7 +6,7 @@ It serves as the **Base Image** for all upstream vehicles (specifically
 **[Booster](https://github.com/Jetscale-ai/Booster)**), providing:
 
 1. **Thruster Dev (`thruster-dev`)**: A heavy-duty Ubuntu 24.04 environment pre-loaded with the "mechanic's kit" (`curl`, `git`, `jq`, `yq`, `make`).
-2. **Thruster Runtime (`thruster`)**: A streamlined Alpine 3.22 combustion
+2. **Thruster Runtime (`thruster`)**: A streamlined Alpine 3.22.8 combustion
    chamber, hardened for production with only the essentials (`tini`,
    `ca-certificates`).
 
@@ -15,7 +15,7 @@ It serves as the **Base Image** for all upstream vehicles (specifically
 | Image | Base OS | Purpose | Key Tools |
 | :--- | :--- | :--- | :--- |
 | `ghcr.io/jetscale-ai/thruster-dev` | Ubuntu 24.04 | CI, DevContainers | `git`, `curl`, `vim`, `jq`, `yq`, `make`, `tini` |
-| `ghcr.io/jetscale-ai/thruster` | Alpine 3.22 | Production | `tini`, `ca-certificates`, `tzdata`, `bash`, `curl` |
+| `ghcr.io/jetscale-ai/thruster` | Alpine 3.22.8 | Production | `tini`, `ca-certificates`, `tzdata`, `bash`, `curl` |
 
 ## Usage
 

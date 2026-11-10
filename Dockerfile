@@ -41,7 +41,7 @@ RUN curl -fsSL "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/
 # -----------------------------------------
 # TARGET: thruster
 # -----------------------------------------
-FROM alpine:3.22 AS thruster
+FROM alpine:3.22.8 AS thruster
 
 RUN apk upgrade --no-cache && \
     apk add --no-cache --upgrade \
