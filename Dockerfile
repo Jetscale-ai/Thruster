@@ -38,7 +38,12 @@ RUN apt-get update && apt-get upgrade -y && \
 # https://emudhra.we-have-a-problem.com/
 # (grep matches the first base64 line of emSign ECC Root CA - G3,
 #  SHA-256 86:A1:EC:BA:...:6B:BE:6B; the bundle carries no labels)
-RUN ! grep -qF "MIICTjCCAdOgAwIBAgIKPPYHqWhwDtqLhDAKBggqhkjOPQQDAzBrMQswCQYDVQQG" /etc/ssl/certs/ca-certificates.crt
+# Also fail if the bundle is missing or empty (grep would exit 2 and `!` would
+# pass), and if the per-cert file is still in /etc/ssl/certs, which Go and
+# OpenSSL clients read as a directory too.
+RUN test -s /etc/ssl/certs/ca-certificates.crt \
+    && ! grep -qF "MIICTjCCAdOgAwIBAgIKPPYHqWhwDtqLhDAKBggqhkjOPQQDAzBrMQswCQYDVQQG" /etc/ssl/certs/ca-certificates.crt \
+    && ! test -e /etc/ssl/certs/emSign_ECC_Root_CA_-_G3.pem
 
 # Install yq (Pinned Version)
 ARG YQ_VERSION=v4.44.3
@@ -65,6 +70,11 @@ RUN apk upgrade --no-cache && \
 # https://emudhra.we-have-a-problem.com/
 # (grep matches the first base64 line of emSign ECC Root CA - G3,
 #  SHA-256 86:A1:EC:BA:...:6B:BE:6B; the bundle carries no labels)
-RUN ! grep -qF "MIICTjCCAdOgAwIBAgIKPPYHqWhwDtqLhDAKBggqhkjOPQQDAzBrMQswCQYDVQQG" /etc/ssl/certs/ca-certificates.crt
+# Also fail if the bundle is missing or empty (grep would exit 2 and `!` would
+# pass), and if the per-cert file is still in /etc/ssl/certs, which Go and
+# OpenSSL clients read as a directory too.
+RUN test -s /etc/ssl/certs/ca-certificates.crt \
+    && ! grep -qF "MIICTjCCAdOgAwIBAgIKPPYHqWhwDtqLhDAKBggqhkjOPQQDAzBrMQswCQYDVQQG" /etc/ssl/certs/ca-certificates.crt \
+    && ! test -e /etc/ssl/certs/ca-cert-emSign_ECC_Root_CA_-_G3.pem
 
 ENTRYPOINT ["/sbin/tini", "--"]
